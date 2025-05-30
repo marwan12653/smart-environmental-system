@@ -1,4 +1,6 @@
 Smart Environmental Monitoring System
+
+
 A real-time environmental monitoring system using an ESP32 microcontroller, designed to detect temperature, humidity, smoke, and flammable gases (LPG/Natural Gas) using affordable and widely available sensors. The system transmits sensor data to a Flask-based backend server for further processing, alerting, and logging.
 
 📦 Project Overview
