@@ -1,0 +1,80 @@
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <DHT.h>
+
+#define DHTPIN 15
+#define DHTTYPE DHT22
+
+#define MQ2_A_PIN 34
+#define MQ2_D_PIN 25
+
+#define MQ5_A_PIN 35
+#define MQ5_D_PIN 26
+
+DHT dht(DHTPIN, DHTTYPE);
+
+const char* ssid = "your_ssid";
+const char* password = "your_password";
+const char* serverUrl = "http://<YOUR_PC_IP>:7771/api/sensor/readings";
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+
+  pinMode(MQ2_D_PIN, INPUT);
+  pinMode(MQ5_D_PIN, INPUT);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi connected");
+}
+
+void sendSensorData(float temperature, float humidity, int mq2, int mq5) {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin(serverUrl);
+    http.addHeader("Content-Type", "application/json");
+
+    String jsonPayload = "{\"Temperature\":";
+    jsonPayload += String(temperature, 2);
+    jsonPayload += ",\"Humidity\":";
+    jsonPayload += String(humidity, 2);
+    jsonPayload += ",\"MQ2\":";
+    jsonPayload += String(mq2);
+    jsonPayload += ",\"MQ5\":";
+    jsonPayload += String(mq5);
+    jsonPayload += "}";
+
+    int httpResponseCode = http.POST(jsonPayload);
+
+    if (httpResponseCode > 0) {
+      String response = http.getString();
+      Serial.println("Response code: " + String(httpResponseCode));
+      Serial.println("Response: " + response);
+    } else {
+      Serial.println("Error on sending POST: " + String(httpResponseCode));
+    }
+    http.end();
+  } else {
+    Serial.println("WiFi not connected");
+  }
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+
+  int mq2_analog = analogRead(MQ2_A_PIN);
+  int mq5_analog = analogRead(MQ5_A_PIN);
+
+  Serial.println("Sending sensor data...");
+  Serial.printf("Temp: %.2f, Hum: %.2f, MQ2: %d, MQ5: %d\n", temp, hum, mq2_analog, mq5_analog);
+
+  sendSensorData(temp, hum, mq2_analog, mq5_analog);
+
+  delay(10000); // Send every 10 seconds
+}
