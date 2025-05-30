@@ -3,7 +3,7 @@ Smart Environmental Monitoring System
 
 A real-time environmental monitoring system using an ESP32 microcontroller, designed to detect temperature, humidity, smoke, and flammable gases (LPG/Natural Gas) using affordable and widely available sensors. The system transmits sensor data to a Flask-based backend server for further processing, alerting, and logging.
 
-📦 Project Overview
+Project Overview
 This system addresses the need for affordable and scalable environmental safety monitoring in residential, educational, and industrial settings. It provides a compact, low-power solution capable of real-time data collection and wireless communication.
 
 🔧 Hardware Components
@@ -21,7 +21,7 @@ Breadboard & Jumper Wires
 
 Power Supply (USB or battery)
 
-💻 Software Components
+Software Components
 Arduino IDE with ESP32 Board Support
 
 DHT Sensor Library
@@ -30,7 +30,7 @@ Flask (Python) for backend server
 
 React.js (optional) for frontend visualization
 
-📈 System Workflow
+System Workflow
 Sensors read temperature, humidity, smoke, and gas data.
 
 ESP32 collects and formats the readings.
@@ -41,11 +41,11 @@ Flask server logs, processes, and stores the data (e.g., in JSON or database).
 
 Alerts or visualizations can be triggered if thresholds are exceeded.
 
-🛠️ Circuit Diagram
+Circuit Diagram
 All components are placed on a breadboard and wired to the ESP32 GPIO pins. A pull-up resistor is used with the DHT22 sensor to ensure signal reliability.
 Refer to the project diagram for the exact pin configuration.
 
-📊 Sample Output
+Sample Output
 makefile
 Copy
 Edit
@@ -55,7 +55,7 @@ MQ2 (Smoke): 0
 MQ5 (Gas): 1
 The system updates readings every 2 seconds and sends them to the Flask backend automatically.
 
-🚀 Future Improvements
+Future Improvements
 Cloud integration (e.g., Firebase, AWS, or Thingspeak)
 
 SMS or email alert system for gas/smoke detection
